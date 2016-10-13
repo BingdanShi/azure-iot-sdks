@@ -38,7 +38,6 @@ IoTHubTransportMqtt_Create shall create a TRANSPORT_LL_HANDLE that can be furthe
 **SRS_IOTHUB_MQTT_TRANSPORT_07_004: [**If the config's waitingToSend variable is NULL then IoTHubTransportMqtt_Create shall return NULL.**]**  
 **SRS_IOTHUB_MQTT_TRANSPORT_07_005: [**If the upperConfig's variables deviceKey, iotHubName, or iotHubSuffix are empty strings then IoTHubTransportMqtt_Create shall return NULL.**]**  
 **SRS_IOTHUB_MQTT_TRANSPORT_07_006: [**If the upperConfig's variables deviceId is an empty strings or length is greater then 128 then IoTHubTransportMqtt_Create shall return NULL.**]**  
-**SRS_IOTHUB_MQTT_TRANSPORT_07_007: [**If the upperConfig's variables protocolGatewayHostName is non-Null and the length is an empty string then IoTHubTransportMqtt_Create shall return NULL.**]**  
 **SRS_IOTHUB_MQTT_TRANSPORT_07_008: [**If the upperConfig contains a valid protocolGatewayHostName value the this shall be used for the hostname, otherwise the hostname shall be constructed using the iothubname and iothubSuffix.**]**  
 **SRS_IOTHUB_MQTT_TRANSPORT_07_009: [**If any error is encountered then IoTHubTransportMqtt_Create shall return NULL.**]**  
 **SRS_IOTHUB_MQTT_TRANSPORT_07_010: [**IoTHubTransportMqtt_Create shall allocate memory to save its internal state where all topics, hostname, device_id, device_key, sasTokenSr and client handle shall be saved.**]**  
@@ -52,7 +51,6 @@ void IoTHubTransportMqtt_Destroy(TRANSPORT_LL_HANDLE handle)
 ```
 
 **SRS_IOTHUB_MQTT_TRANSPORT_07_012: [**IoTHubTransportMqtt_Destroy shall do nothing if parameter handle is NULL.**]**  
-**SRS_IOTHUB_MQTT_TRANSPORT_07_013: [**If the parameter subscribe is true then IoTHubTransportMqtt_Destroy shall call IoTHubTransportMqtt_Unsubscribe.**]**  
 **SRS_IOTHUB_MQTT_TRANSPORT_07_014: [**IoTHubTransportMqtt_Destroy shall free all the resources currently in use.**]**  
 
 ### IoTHubTransportMqtt_Register

@@ -53,6 +53,7 @@ set(iothub_client_h_files
 ./inc/iothub_client_options.h
 ./inc/iothub_client_version.h
 ./inc/iothubtransport.h
+./inc/iothub_client_private.h
 )
 
 set(iothub_client_h_install_files
@@ -74,7 +75,6 @@ if(${use_http})
         ${iothub_client_ll_transport_h_files}
         ./inc/iothubtransporthttp.h
         ./inc/iothub_transport_ll.h
-        ./inc/iothub_client_private.h
     )
     
     set(iothub_client_h_install_files
@@ -88,21 +88,25 @@ if(${use_amqp})
         set(iothub_client_amqp_transport_c_files
             ${iothub_client_ll_transport_c_files}
             ./src/iothubtransportamqp_websockets.c
+			./src/uamqp_messaging.c
         )
         
         set(iothub_client_amqp_transport_h_files
             ${iothub_client_ll_transport_h_files}
             ./inc/iothubtransportamqp_websockets.h
+			./inc/uamqp_messaging.h
         )
     else()
         set(iothub_client_amqp_transport_c_files
             ${iothub_client_ll_transport_c_files}
-            ./src/iothubtransportamqp.c
+			./src/iothubtransportamqp.c
+            ./src/uamqp_messaging.c
         )
 
         set(iothub_client_amqp_transport_h_files
             ${iothub_client_ll_transport_h_files}
-            ./inc/iothubtransportamqp.h
+			./inc/iothubtransportamqp.h
+            ./inc/uamqp_messaging.h
         )	
     endif()
     
@@ -230,6 +234,7 @@ add_library(iothub_client
 linkSharedUtil(iothub_client)
 
 # Don't build samples under Win32 ARM for now
+if(NOT ${skip_samples})
 if(WIN32)
 # Build samples for WEC 2013 for both ARM and x86 processsor types
   if(WINCE) 
@@ -243,11 +248,13 @@ if(WIN32)
 else()
     add_subdirectory(samples)
 endif()
-
+endif()
 
 if(NOT IN_OPENWRT)
 # Disable tests for OpenWRT
+if(NOT ${skip_unittests})
 add_subdirectory(tests)
+endif()
 endif()
 
 if(WIN32)

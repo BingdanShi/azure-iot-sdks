@@ -16,13 +16,13 @@ for %%i in ("%build-root%") do set build-root=%%~fi
 REM check that we have a valid argument
 if "%1" equ "" (
   set jenkins_job=_integrate-into-develop
-) else if "%1" equ "c" (
+) else if /i "%1" equ "c" (
   set jenkins_job=_integrate-into-develop-c-and-wrappers
-) else if "%1" equ "csharp" (
+) else if /i "%1" equ "csharp" (
   set jenkins_job=_integrate-into-develop-csharp
-) else if "%1" equ "java" (
+) else if /i "%1" equ "java" (
   set jenkins_job=_integrate-into-develop-java
-) else if "%1" equ "node" (
+) else if /i "%1" equ "node" (
   set jenkins_job=_integrate-into-develop-node
 ) else (
   echo Usage:
@@ -39,9 +39,17 @@ if not !ERRORLEVEL!==0 exit /b !ERRORLEVEL!
 REM check that jenkins-cli.jar is in the repository's tools folder
 if not exist %build-root%\tools\jenkins-cli.jar (
 	echo jenkins-cli does not exist
-	echo Use the following link to download it into the tools folder of your repository:
+	echo Downloading from repository:
 	echo http://azure-iot-sdks-ci.westus.cloudapp.azure.com:8080/jnlpJars/jenkins-cli.jar
-	exit /b 1
+	
+	powershell -Command "Invoke-WebRequest http://azure-iot-sdks-ci.westus.cloudapp.azure.com:8080/jnlpJars/jenkins-cli.jar -OutFile %build-root%\tools\jenkins-cli.jar"
+	
+	if not !ERRORLEVEL!==0 (
+		echo Failed downloading jenkins-cli.jar
+		echo Use the following link to manually download it into the tools folder of your repository:
+		echo http://azure-iot-sdks-ci.westus.cloudapp.azure.com:8080/jnlpJars/jenkins-cli.jar
+		exit /b 1
+	)
 )
 
 REM find current branch
